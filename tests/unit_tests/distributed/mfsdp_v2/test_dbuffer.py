@@ -480,7 +480,7 @@ def test_partial_reduce_scatter_to_flat_average_without_symm_mem_detector(
     """Ordinary AVG remains available when PyTorch lacks the symmetric-memory detector."""
     device, world_size = distributed_setup.device, distributed_setup.world_size
     mesh = init_device_mesh(device.type, (world_size,))
-    monkeypatch.delattr(symm_mem, "is_symm_mem_tensor")
+    monkeypatch.delattr(symm_mem, "is_symm_mem_tensor", raising=False)
     rank_scale = float(distributed_setup.rank + 1)
     partial_buffer = DBuffer.distribute_tensors(
         [torch.full((5, 3), rank_scale, dtype=torch.float32, device=device)],
